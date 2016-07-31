@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -22,6 +23,7 @@ public class AddEmployee extends AppCompatActivity {
     private DatePicker datePicker;
     private String INTENT_ACTION;
     private Employee e_old;
+    private TextView doj_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class AddEmployee extends AppCompatActivity {
         name_edit = (EditText) findViewById(R.id.name_edit);
         pay_edit = (EditText) findViewById(R.id.pay_edit);
         datePicker = (DatePicker) findViewById(R.id.dob_edit);
+        doj_text = (TextView) findViewById(R.id.doj_text);
         INTENT_ACTION = getIntent().getAction();
         if(INTENT_ACTION.equals(Constants.ACTION_ADD_EMP)){
             getSupportActionBar().setTitle("Add Employee");
@@ -39,6 +42,7 @@ public class AddEmployee extends AppCompatActivity {
         }else if(INTENT_ACTION.equals(Constants.ACTION_EDIT_EMP)){
             getSupportActionBar().setTitle("Edit Employee");
             datePicker.setVisibility(View.GONE);
+            doj_text.setText("Rating");
             String _id = Integer.toString(getIntent().getIntExtra(Constants.GET_INTENT_ID, 0));
             e_old = new TableControllerDB(this).readOne(_id);
             Log.v("tag1","tag1 "+_id);
