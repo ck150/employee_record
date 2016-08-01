@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -71,20 +72,29 @@ public class MainActivity extends AppCompatActivity {
             pageNo++;
             textPageNo.setText("Page " + (pageNo + 1));
         }else{
+            employeesList = new TableControllerDB(this).read((pageNo)*pageLen,pageLen);
+            customListAdapter = new CustomListAdapter(this, employeesList);
+            listView.setAdapter(customListAdapter);
+            customListAdapter.notifyDataSetChanged();
             Toast.makeText(this,"No more records found",Toast.LENGTH_SHORT).show();
         }
     }
 
     private boolean readRecords(int start,int length){
-        if(employeesList!=null){
-            employeesList.clear();
-        }
-        employeesList = new TableControllerDB(this).read(start,length);
-        if(employeesList==null){
+        List<Employee> demoList = new TableControllerDB(this).read(start,length);
+        if(demoList==null){
             return false;
-        }else if(employeesList.size()==0){
+        }else if(demoList.size()==0){
             return false;
         }else{
+            if(employeesList!=null){
+                employeesList.clear();
+            }
+            employeesList = new ArrayList<>(demoList);
+            customListAdapter = new CustomListAdapter(this, employeesList);
+            listView.setAdapter(customListAdapter);
+            customListAdapter.notifyDataSetChanged();
+
             return true;
         }
     }
